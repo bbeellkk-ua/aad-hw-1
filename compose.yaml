@@ -1,0 +1,14 @@
+services:
+  vulnerability-agent:
+    build: .
+    environment:
+      # OPENAI_API_KEY: ${OPENAI_API_KEY:?Set OPENAI_API_KEY}
+      # OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+      # OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4.1-mini}
+      AGENT_MAX_STEPS: ${AGENT_MAX_STEPS:-10}
+      AGENT_TIMEOUT_SECONDS: ${AGENT_TIMEOUT_SECONDS:-120}
+      AGENT_MAX_REPEATS: ${AGENT_MAX_REPEATS:-3}
+      HTTP_TIMEOUT_SECONDS: ${HTTP_TIMEOUT_SECONDS:-15}
+    volumes:
+      - ./artifacts:/app/artifacts
+    command: ["--query", "Знайди вразливості Django 3.2.1 у PyPI та оціни ризик"]

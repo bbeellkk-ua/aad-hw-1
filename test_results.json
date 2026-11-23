@@ -1,0 +1,132 @@
+[
+  {
+    "test_id": "TC-001",
+    "query": "Знайди відомі вразливості Django 3.2.1 у PyPI.",
+    "expected": "OSV-пошук конкретної версії пакета.",
+    "actual": {
+      "answer": "Django 3.2.1 у PyPI має багато відомих вразливостей. Ось деякі з них:\n- SQL Injection (CVE-2022-28346, CVE-2025-57833, CVE-2025-64459, CVE-2021-35042)\n- Resource exhaustion (CVE-2023-24580)\n- Path Traversal (CVE-2021-33203)\n- Denial of Service (CVE-2021-45115, CVE-2023-41164, CVE-2023-43665 та інші)\n- Information disclosure (CVE-2021-45116)\n- Cross-site Scripting (CVE-2022-22818)\n- Header injection (CVE-2021-32052)\nі багато інших.\n\nЯкщо потрібно, можу уточнити деталі конкретної вразливості.",
+      "confidence": 0.8,
+      "severity": "unknown",
+      "affected": null,
+      "exploited_in_wild": null,
+      "epss_score": null,
+      "mitigations": [],
+      "sources": [
+        "https://api.osv.dev/v1/query"
+      ],
+      "limitations": [
+        "Provider не повернув native structured output; структуровані поля зібрано з результатів tools."
+      ]
+    },
+    "status": "success",
+    "steps": 2,
+    "tool_calls": [
+      "search_package_vulnerabilities"
+    ],
+    "elapsed_ms": 11391,
+    "complexity": "simple",
+    "max_steps_reached": false,
+    "timeout_reached": false,
+    "stop_reason": "completed"
+  },
+  {
+    "test_id": "TC-002",
+    "query": "Надай деталі CVE-2021-44228 і поясни вектор атаки.",
+    "expected": "Деталі CVE з посиланнями на джерела.",
+    "actual": {
+      "answer": "CVE-2021-44228 — це вразливість віддаленого виконання коду (RCE) у бібліотеці Apache Log4j2, яка виникає через неправильну обробку JNDI-функцій. У версіях Apache Log4j2 від 2.0-beta9 до 2.15.0 (за винятком деяких безпечних релізів) JNDI у конфігураціях, логах та параметрах повідомлень не захищений від атак з використанням LDAP та інших JNDI endpoint'ів, керованих зловмисником. Це дозволяє атакуючому, маючи контроль над повідомленнями або параметрами логів, запускати довільний код, завантажений з LDAP-сервера, якщо увімкнена заміна пошуку в повідомленнях.\n\nПочинаючи з версії 2.15.0 ця поведінка за замовчуванням відключена, а з версії 2.16.0 (у складі 2.12.2, 2.12.3, 2.3.1) підтримка цих функцій повністю вилучена.\n\nВектор атаки полягає в тому, що зловмисник надсилає спеціально сформований лог-повідомлення або параметр логування, який включає JNDI-запит до LDAP-сервера, контрольованого атакуючим. Це призводить до завантаження і виконання довільного коду на сервері.\n\nЦя уразливість має високу тяжкість за CVSS 3.1 (AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H).\n\nВразливість є підтвердженою у каталозі CISA KEV і широко експлуатується (EPS probability 0.99999, 100-й процентиль).\n\nДля безпеки слід:\n- Оновити Apache Log4j2 до версії 2.16.0 або новіше.\n- Якщо оновлення неможливе, застосувати рекомендовані тимчасові міри, наприклад, відключення функцій JNDI, як описано у https://www.cisa.gov/uscert/ed-22-02-apache-log4j-recommended-mitigation-measures.\n\nБільше деталей і рекомендацій можна знайти за посиланнями:\n- https://logging.apache.org/log4j/2.x/security.html\n- https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "confidence": 0.8,
+      "severity": "critical",
+      "affected": null,
+      "exploited_in_wild": true,
+      "epss_score": 0.99999,
+      "mitigations": [
+        "For all affected software assets for which updates exist, the only acceptable remediation actions are: 1) Apply updates; OR 2) remove affected assets from agency networks. Temporary mitigations using one of the measures provided at https://www.cisa.gov/uscert/ed-22-02-apache-log4j-recommended-mitigation-measures are only acceptable until updates are available."
+      ],
+      "sources": [
+        "https://api.osv.dev/v1/vulns/CVE-2021-44228",
+        "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+        "https://api.first.org/data/v1/epss?cve=CVE-2021-44228"
+      ],
+      "limitations": [
+        "Provider не повернув native structured output; структуровані поля зібрано з результатів tools."
+      ]
+    },
+    "status": "success",
+    "steps": 2,
+    "tool_calls": [
+      "get_vulnerability_details",
+      "check_cisa_kev",
+      "get_epss_score"
+    ],
+    "elapsed_ms": 18488,
+    "complexity": "medium",
+    "max_steps_reached": false,
+    "timeout_reached": false,
+    "stop_reason": "completed"
+  },
+  {
+    "test_id": "TC-003",
+    "query": "Досліди CVE-2021-44228: severity, CISA KEV, EPSS та мітігації.",
+    "expected": "Агрегація details, KEV та EPSS із мітігаціями.",
+    "actual": {
+      "answer": "CVE-2021-44228 - це вразливість в Apache Log4j2, яка дозволяє віддалене виконання коду через проблеми з JNDI, якщо атакуючий контролює логовані повідомлення або їх параметри. Вразливі версії: Log4j 2.0-beta9 до 2.15.0 (окрім деяких безпечних виправлень). Починаючи з версії 2.16.0, небезпечна функціональність була видалена.\n\nSeverity за CVSS 3.1: критична (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H) — повна втручання, підвищена конфіденційність, цілісність і доступність.\n\nCISA KEV підтверджує, що ця вразливість відома як експлуатована і вимагає негайного оновлення або видалення вразливих активів. Застосування тимчасових заходів (мітігацій) дозволене лише до випуску оновлень (https://www.cisa.gov/uscert/ed-22-02-apache-log4j-recommended-mitigation-measures).\n\nEPSS (ймовірність експлуатації) дуже висока — 0.99999, 100-й процентиль, оновлено на 2026-11-23.\n\nМітігації:\n- Оновлення Log4j до 2.16.0 або новіше.\n- Якщо оновлення неможливе, тимчасові заходи за рекомендаціями CISA.\n\nДеталі і посилання можна знайти тут:\n- https://nvd.nist.gov/vuln/detail/CVE-2021-44228\n- https://www.cisa.gov/known-exploited-vulnerabilities-catalog\n- https://www.cisa.gov/uscert/ed-22-02-apache-log4j-recommended-mitigation-measures\n- https://logging.apache.org/log4j/2.x/security.html",
+      "confidence": 0.8,
+      "severity": "critical",
+      "affected": null,
+      "exploited_in_wild": true,
+      "epss_score": 0.99999,
+      "mitigations": [
+        "For all affected software assets for which updates exist, the only acceptable remediation actions are: 1) Apply updates; OR 2) remove affected assets from agency networks. Temporary mitigations using one of the measures provided at https://www.cisa.gov/uscert/ed-22-02-apache-log4j-recommended-mitigation-measures are only acceptable until updates are available."
+      ],
+      "sources": [
+        "https://api.osv.dev/v1/vulns/CVE-2021-44228",
+        "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+        "https://api.first.org/data/v1/epss?cve=CVE-2021-44228"
+      ],
+      "limitations": [
+        "Provider не повернув native structured output; структуровані поля зібрано з результатів tools."
+      ]
+    },
+    "status": "success",
+    "steps": 2,
+    "tool_calls": [
+      "get_vulnerability_details",
+      "check_cisa_kev",
+      "get_epss_score"
+    ],
+    "elapsed_ms": 18075,
+    "complexity": "complex",
+    "max_steps_reached": false,
+    "timeout_reached": false,
+    "stop_reason": "completed"
+  },
+  {
+    "test_id": "TC-004",
+    "query": "Перевір у CISA KEV identifier CVE-невідомо.",
+    "expected": "Tool validation error або уточнення коректного CVE.",
+    "actual": {
+      "answer": "Ви надали \"CVE-невідомо\" як identifier, що не є дійсним CVE-ідентифікатором. Будь ласка, надайте правильний CVE-ідентифікатор (наприклад, CVE-2021-44228), щоб я міг перевірити його у CISA KEV.",
+      "confidence": 0.4,
+      "severity": "unknown",
+      "affected": null,
+      "exploited_in_wild": null,
+      "epss_score": null,
+      "mitigations": [],
+      "sources": [],
+      "limitations": [
+        "Provider не повернув native structured output; структуровані поля зібрано з результатів tools."
+      ]
+    },
+    "status": "success",
+    "steps": 1,
+    "tool_calls": [],
+    "elapsed_ms": 5791,
+    "complexity": "validation",
+    "max_steps_reached": false,
+    "timeout_reached": false,
+    "stop_reason": "completed"
+  }
+]
